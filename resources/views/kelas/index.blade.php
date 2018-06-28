@@ -1,35 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Kelas</title>
-</head>
-<body>
-    <a href="{{ route('kelas.create') }}">Tambah Kelas</a>
-    <br>
-    <table border="1">
-        <tr>
-            <th>No</th>
-            <th>Kelas</th>
-            <th colspan="2">Aksi</th>
-        </tr>
-        @php $no =1; @endphp
-        @foreach($kelas as $data)
-            <tr>
-                <td>{{ $no++ }}</td>
-                <td>{{ $data->kelas }}</td>
-                <td><a href="{{ route('kelas.edit',$data->id) }}">Edit</a></td>
-                <td>
-                    <form method="post" action="{{ route('kelas.destroy',$data->id) }}">
-                        <input name="_token" type="hidden" value="{{ csrf_token() }}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Hapus">
-                    </form>
-                </td>
-            </tr>
-        @endforeach
-    </table>
-</body>
-</html>
+@extends('layouts.admin')
+@section('content')
+<div class="section__content section__content--p30">
+    <div class="container-fluid">
+        <div class="row m-t-30">
+            <div class="col-md-12">
+                <!-- DATA TABLE-->
+                <div class="table-responsive m-b-40">
+                    <table class="table table-borderless table-data3">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kelas</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                @php $no =1; @endphp
+                                @foreach($kelas as $data)
+                                @if($data->status == 0)
+                                @elseif($data->status == 1)
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $data->kelas }}</td>
+                                <td><a href="{{ route('kelass.edit',$data->id) }}" class="btn btn-primary">Edit</a>
+                                <a href="{{ route('kelass.edit',$data->id) }}" class="btn btn-danger">Delete</a></td>
+                            </tr>
+                            @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END DATA TABLE-->
+            </div>
+        </div>
+        
+    </div>
+</div>
+@endsection

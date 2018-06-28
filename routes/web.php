@@ -19,11 +19,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-// Route Kelas
-Route::get('kelas','KelasController@index')->name('kelas.index');
-Route::get('kelas/create','KelasController@create')->name('kelas.create');
-Route::post('kelas','KelasController@store')->name('kelas.store');
-Route::get('kelas/{kelas}/edit','KelasController@edit')->name('kelas.edit');
-Route::match(['put', 'patch'],'kelas/{kelas}','KelasController@update')->name('kelas.update');
-Route::get('kelas/{kelas}','KelasController@show')->name('kelas.show');
-Route::delete('kelas/{kelas}','KelasController@destroy')->name('kelas.destroy');
+Route::group(['prefix'=>'admin', 'middleware'=>['auth','role:admin']], 
+function () {
+    Route::resource('siswa','SiswaController');
+    Route::resource('kelass','KelasController');
+    Route::resource('kategori','KategoriController');
+    Route::resource('artikel','ArtikelController');
+    Route::post('artikel/{publish}', 'ArtikelController@Publish')->name('artikel.publish');
+    Route::resource('file','FileController'); 
+});
+
+Route::get('blog','PklController@blog');
+Route::get('blog/{id}', array('as' => 'singleblog', 'uses' =>'PklController@singleblog'));

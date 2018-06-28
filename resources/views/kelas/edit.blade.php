@@ -8,7 +8,7 @@
 </head>
 <body>
     <table>
-        <form action="{{ route('kelas.update',$kelas->id) }}" method="post">
+        <form action="{{ route('kelass.update',$kelas->id) }}" method="post">
                 <input name="_method" type="hidden" value="PATCH">
             {{ csrf_field() }}
         <tr>

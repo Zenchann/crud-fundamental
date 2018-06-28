@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Siswa;
 use Illuminate\Http\Request;
-
+use App\Kelas;
+use File;
 class SiswaController extends Controller
 {
     /**
@@ -14,7 +15,9 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        //
+        $siswa = Siswa::all();
+        // dd($siswa);
+        return view('siswa.index',compact('siswa'));
     }
 
     /**
@@ -24,7 +27,8 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        //
+        $kelas = Kelas::all();
+        return view('siswa.create',compact('kelas'));
     }
 
     /**
@@ -35,7 +39,22 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $siswa = new Siswa;
+        $siswa->nama = $request->nama;
+        $siswa->nis = $request->nis;
+        $siswa->kelas_id = $request->kelas_id;
+
+        // upload foto
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $destinationPath = public_path().'/assets/img/fotosiswa/';
+            $filename = str_random(6).'_'.$file->getClientOriginalName();
+            $uploadSuccess = $file->move($destinationPath, $filename);
+            $siswa->foto = $filename;
+            }
+        $siswa->save();
+        return redirect()->route('siswa.index');
+    
     }
 
     /**
@@ -57,7 +76,10 @@ class SiswaController extends Controller
      */
     public function edit(Siswa $siswa)
     {
-        //
+        $siswa = Siswa::findOrFail($siswa->id);
+        $kelas = Kelas::all();
+        $selected = Siswa::findOrFail($siswa->id)->kelas_id;
+        return view('siswa.edit',compact('kelas','siswa','selected'));
     }
 
     /**
@@ -69,7 +91,35 @@ class SiswaController extends Controller
      */
     public function update(Request $request, Siswa $siswa)
     {
-        //
+        $siswa = Siswa::findOrFail($siswa->id);
+        $siswa->nama = $request->nama;
+        $siswa->nis = $request->nis;
+        $siswa->kelas_id = $request->kelas_id;
+
+// edit upload foto
+if ($request->hasFile('foto')) {
+    $file = $request->file('foto');
+    $destinationPath = public_path().'/assets/img/fotosiswa/';
+    $filename = str_random(6).'_'.$file->getClientOriginalName();
+    $uploadSuccess = $file->move($destinationPath, $filename);
+    
+        // hapus foto lama, jika ada
+        if ($siswa->foto) {
+        $old_foto = $siswa->foto;
+        $filepath = public_path() . DIRECTORY_SEPARATOR . '/assets/img/fotosiswa'
+        . DIRECTORY_SEPARATOR . $siswa->foto;
+            try {
+            File::delete($filepath);
+            } catch (FileNotFoundException $e) {
+        // File sudah dihapus/tidak ada
+            }
+        }
+    $siswa->foto = $filename;
+}
+    
+        $siswa->save();
+        // dd($siswa);
+        return redirect()->route('siswa.index');
     }
 
     /**
@@ -80,6 +130,19 @@ class SiswaController extends Controller
      */
     public function destroy(Siswa $siswa)
     {
-        //
+        $siswa = Siswa::findOrFail($siswa->id);
+        if ($siswa->foto) {
+            $old_foto = $siswa->foto;
+            $filepath = public_path() . DIRECTORY_SEPARATOR . 'assets/img/fotosiswa/'
+            . DIRECTORY_SEPARATOR . $siswa->foto;
+            try {
+            File::delete($filepath);
+            } catch (FileNotFoundException $e) {
+            // File sudah dihapus/tidak ada
+            }
+            }
+            $siswa->delete();
+    
+        return redirect()->route('siswa.index');
     }
 }

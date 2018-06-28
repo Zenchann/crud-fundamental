@@ -16,9 +16,12 @@ class CreateArtikelsTable extends Migration
         Schema::create('artikels', function (Blueprint $table) {
             $table->increments('id');
             $table->string('judul');
-            $table->text('isi');
-            $table->UnsignedInteger('kategori_id');
-            $table->foreign('kategori_id')->references('id')->on('kategoris')->ondelete('cascade');
+            $table->text('konten');
+            $table->string('slug');
+            $table->string('foto');
+            $table->integer('kategori_id');
+            $table->integer('user_id');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

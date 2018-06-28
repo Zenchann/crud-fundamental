@@ -14,7 +14,9 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //
+        $kategori = Kategori::all();
+        // dd($kategori);
+        return view('admin.kategori.index',compact('kategori'));
     }
 
     /**
@@ -24,7 +26,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.kategori.create');
     }
 
     /**
@@ -35,7 +37,12 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $kategori = new kategori;
+        $kategori->nama_kategori = $request->nama_kategori;
+        $kategori->slug = str_slug($request->nama_kategori,'-');
+        // dd($kategori);
+        $kategori->save();
+        return redirect()->route('kategori.index');
     }
 
     /**
@@ -57,29 +64,35 @@ class KategoriController extends Controller
      */
     public function edit(Kategori $kategori)
     {
-        //
+        return view('admin.kategori.edit',compact('kategori'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Kategori  $kategori
+     * @param  \App\kategori  $kategori
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Kategori $kategori)
     {
-        //
+        $a = kategori::findOrFail($kategori->id);;
+        $a->kategori = $request->kategori;
+        // dd($kategori);
+        $a->save();
+        return redirect()->route('kategori.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Kategori  $kategori
+     * @param  \App\kategori  $kategori
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kategori $kategori)
+    public function destroy(kategori $kategori)
     {
-        //
+        $kate = Kategori::findOrFail($kategori->id);
+        $kate->delete();
+        return redirect()->route('kategori.index');
     }
 }

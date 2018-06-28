@@ -41,7 +41,7 @@ class KelasController extends Controller
         $kelas->kelas = $request->kelas;
         // dd($kelas);
         $kelas->save();
-        return redirect('kelas');
+        return redirect()->route('kelas.index');
     }
 
     /**
@@ -75,10 +75,10 @@ class KelasController extends Controller
      */
     public function update(Request $request, kelas $kelas)
     {
-        $kelas = Kelas::findOrFail($kelas->id);;
-        $kelas->kelas = $request->kelas;
+        $a = Kelas::findOrFail($kelas->id);;
+        $a->kelas = $request->kelas;
         // dd($kelas);
-        $kelas->save();
+        $a->save();
         return redirect('kelas');
     }
 
