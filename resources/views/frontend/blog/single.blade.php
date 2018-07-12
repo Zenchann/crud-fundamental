@@ -1,17 +1,31 @@
-@extends('layouts.app')
+@extends('layouts.frontend')
 @section('content')
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <h1>{{ $artikel->judul }}</h1>
-        <h5>Published: {{ date('M j, Y', strtotime($artikel->created_at)) }}</h5>
-        <h5>Penulis : {{ $artikel->User->name }}</h5>
-        <p>Kategori: {{ $artikel->Kategori->nama_kategori }}</p>
-        <img src="{{ asset('assets/img/fotoartikel/'.$artikel->foto.'') }}" style="width=100px; height=250x;" alt="">
+<div class="container">
+<div class="row blog-entries">
+    <div class="col-md-12 col-lg-8 main-content">
+        <h1 class="mb-4">{{ $artikel->judul }}</h1>
+        <div class="col-md-12 mb-4 element-animate">
+                <img src="/assets/img/fotoartikel/{{ $artikel->foto }}" alt="Image placeholder" class="img-fluid">
+            </div>
+        <div class="post-meta">
+                    <span class="category">{{ $artikel->Kategori->nama_kategori }}</span>
+                    <span class="mr-2">{{ $artikel->created_at->diffForHumans() }} </span> &bullet;
+                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                </div>
+        <div class="post-content-body">
         <p>{!! $artikel->konten !!}</p>
-        <hr>
+        </div>
+
+        
+        <div class="pt-5">
+        <p>Categories:  <a href="#">{{ $artikel->Kategori->nama_kategori }}</a></p>
+        </div>
     </div>
-</div>
-<div id="disqus_thread"></div>
+
+      </div>
+      <div id="disqus_thread"></div>
+    </div>
+
 @push('scripts')
 <script>
 

@@ -36,6 +36,10 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li><a class="navbar-brand" href="{{ url('blog') }}">Blog</a></li>
+                        @php $kategori = \App\Kategori::all(); @endphp
+                        @foreach($kategori as $data)
+                        <li><a class="navbar-brand" href="{{ $data->slug }}">{{ $data->nama_kategori }}</a></li>
+                        @endforeach
                     </ul>
 
                     <!-- Right Side Of Navbar -->
